@@ -11,9 +11,13 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+
+import static com.mastek.training.Forum.model.Thread.Comparators.*;
 
 @RestController
 public class ThreadController {
@@ -48,12 +52,25 @@ public class ThreadController {
         if (page == null) page = 0;
         Query customFilter = new Query();
         customFilter.addCriteria(Criteria.where(key).is(value));
+
         if (key == null || value == null) {
             threads = mongoTemplate.findAll(Thread.class);
         } else {
             threads = mongoTemplate.find(customFilter, Thread.class);
         }
-        //threads.sort(Comparator.comparing(Thread::getTitle));
+
+        Comparator<Thread> threadComparator = TITLE;
+
+        if (sort != null) {
+            if (sort.equals("rank")) {
+                threadComparator = RANKING;
+            } else if (sort.equals("body")) {
+                threadComparator = BODY;
+            }
+        }
+
+        Collections.sort(threads, threadComparator);
+
         return threads;
     }
 

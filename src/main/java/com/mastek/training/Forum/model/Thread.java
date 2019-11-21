@@ -5,9 +5,10 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 
 @Document(collection = "thread")
-public class Thread {
+public class Thread implements Comparable<Thread>{
 
     @Transient
     public static final String SEQUENCE_NAME = "thread_sequence";
@@ -57,4 +58,19 @@ public class Thread {
     public void setRanking(int ranking) {
         this.ranking = ranking;
     }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    @Override
+    public int compareTo(Thread o) {
+        return Comparators.TITLE.compare(this, o);
+    }
+
+    public static class Comparators {
+        public static final Comparator<Thread> TITLE = (o1, o2) -> o1.title.compareTo(o2.title);
+        public static final Comparator<Thread> BODY = (o1, o2) -> o1.body.compareTo(o2.body);
+        public static Comparator<Thread> RANKING = (o1, o2) -> o1.ranking - o2.ranking;
+   }
 }
