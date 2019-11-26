@@ -2,10 +2,12 @@ package com.mastek.training.Forum.controllers;
 
 import com.mastek.training.Forum.model.Comment;
 import com.mastek.training.Forum.model.Thread;
-import com.mastek.training.Forum.model.User;
-import com.mastek.training.Forum.repository.UserRepository;
+import com.mastek.training.Forum.repository.ThreadRepository;
+import com.mastek.training.Forum.services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,18 +20,10 @@ import java.util.List;
 public class CommentController {
 
     @Autowired
-    MongoTemplate mongoTemplate;
-
-    @Autowired
-    UserRepository userRepository;
+    CommentService commentService;
 
     @PostMapping("/comment")
-    public Thread addNewComment(@RequestBody Comment comment, @RequestParam String userId, @RequestParam int threadIndex) {
-        User user = mongoTemplate.findById(userId, User.class);
-        Thread thread = user.getThreads().get(threadIndex);
-        List<Comment> comments = new ArrayList<>();
-        comments.add(comment);
-        thread.setComments(comments);
-        return thread;
+    public Thread addNewComment(@RequestBody Comment comment, @RequestParam String threadid) {
+        return commentService.addNewComment(comment, threadid);
     }
 }
