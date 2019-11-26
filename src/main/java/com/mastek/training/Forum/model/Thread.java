@@ -1,11 +1,13 @@
 package com.mastek.training.Forum.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.List;
 
 @Document(collection = "thread")
 public class Thread implements Comparable<Thread>{
@@ -13,22 +15,18 @@ public class Thread implements Comparable<Thread>{
     @Transient
     public static final String SEQUENCE_NAME = "thread_sequence";
 
-    @Id
-    private String id;
+
     private String title;
     private String body;
     private LocalDateTime date;
     private int ranking;
+    private List<Comment> comments;
 
-    public Thread(String title, String body, int ranking) {
+    public Thread(int ranking, List<Comment> comments, String title, String body) {
+        this.ranking = ranking;
+        this.comments = comments;
         this.title = title;
         this.body = body;
-        this.date = java.time.LocalDateTime.now();
-        this.ranking = ranking;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getTitle() {
@@ -47,10 +45,6 @@ public class Thread implements Comparable<Thread>{
         this.body = body;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public int getRanking() {
         return ranking;
     }
@@ -63,14 +57,16 @@ public class Thread implements Comparable<Thread>{
         return date;
     }
 
-    @Override
-    public int compareTo(Thread o) {
-        return Comparators.TITLE.compare(this, o);
+    public List<Comment> getComments() {
+        return comments;
     }
 
-    public static class Comparators {
-        public static final Comparator<Thread> TITLE = (o1, o2) -> o1.title.compareTo(o2.title);
-        public static final Comparator<Thread> BODY = (o1, o2) -> o1.body.compareTo(o2.body);
-        public static Comparator<Thread> RANKING = (o1, o2) -> o1.ranking - o2.ranking;
-   }
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    @Override
+    public int compareTo(Thread o) {
+        return 0;
+    }
 }

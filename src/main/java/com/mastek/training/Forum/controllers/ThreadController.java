@@ -1,82 +1,72 @@
 package com.mastek.training.Forum.controllers;
 
 import com.mastek.training.Forum.model.Thread;
+import com.mastek.training.Forum.model.User;
 import com.mastek.training.Forum.repository.ThreadRepository;
-import com.mastek.training.Forum.services.SequenceGeneratorService;
+import com.mastek.training.Forum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-
-import static com.mastek.training.Forum.model.Thread.Comparators.*;
 
 @RestController
 public class ThreadController {
 
-    SequenceGeneratorService sequenceGeneratorService;
+    @Autowired
+    private ThreadRepository threadRepository;
 
     @Autowired
-    private ThreadRepository repository;
+    private UserRepository userRepository;
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    // userId will be gathered automatically from user who is logged in
     @PostMapping("/thread")
-    public String saveThread(@RequestBody Thread thread) {
-        repository.save(thread);
-        return "Added thread with id: " + thread.getId();
-    }
-
-//    @GetMapping("/threads")
-//    public List<Thread> getThreads(@RequestParam int page) {
-//        final Pageable pageableRequest = PageRequest.of(page, 2);
-//        Query pagableQuery = new Query();
-//        pagableQuery.with(pageableRequest);
-//        List<Thread> threads = mongoTemplate.find(pagableQuery, Thread.class);
-//        return threads;
-//    }
-
-    @GetMapping("/thread")
-    public List<Thread> getCustomThread(@RequestParam(required = false) String key, @RequestParam(required = false) String value,
-                                        @RequestParam(required = false) Integer page, @RequestParam(required = false) String sort) {
-        List<Thread> threads;
-        if (page == null) page = 0;
-        Query customFilter = new Query();
-        customFilter.addCriteria(Criteria.where(key).is(value));
-
-        if (key == null || value == null) {
-            threads = mongoTemplate.findAll(Thread.class);
+    public User userAddNewThread(@RequestBody Thread thread, @RequestParam String userId) {
+        User user = mongoTemplate.findById(userId, User.class);
+        List<Thread> threads = new ArrayList<>();
+        if (user.getThreads() == null) {
+            threads.add(thread);
         } else {
-            threads = mongoTemplate.find(customFilter, Thread.class);
-        }
-
-        Comparator<Thread> threadComparator = TITLE;
-
-        if (sort != null) {
-            if (sort.equals("rank")) {
-                threadComparator = RANKING;
-            } else if (sort.equals("body")) {
-                threadComparator = BODY;
+            for (Thread x : user.getThreads()) {
+                threads.add(x);
             }
         }
+        user.setThreads(threads);
+        userRepository.save(user);
+        return user;
+    }
 
-        Collections.sort(threads, threadComparator);
-
+    @GetMapping("/threadSearch")
+    public List<Thread> searchThread(@RequestParam(required = false) String key, @RequestParam(required = false) String value) {
+        List<Thread> threads;
+        Query customFilter = new Query();
+        customFilter.addCriteria(Criteria.where(key).is(value));
+        threads = (key == null || value == null) ? mongoTemplate.findAll(Thread.class) : mongoTemplate.find(customFilter, Thread.class);
         return threads;
+    }
+
+    @GetMapping("/threadFilter")
+    public List<Thread> filterThread(@RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sort, @RequestParam(required = false) Integer page) {
+        Pageable sortByAsc = PageRequest.of(page, pageSize, Sort.by(sort));
+        Page<Thread> threads = threadRepository.findAll(sortByAsc);
+        return threads.getContent();
     }
 
     @DeleteMapping("/thread/{id}")
     public String deleteThread(@PathVariable Integer id) {
-        repository.deleteById(id);
+        threadRepository.deleteById(id);
         return "Deleted thread with id: " + id;
     }
 }
