@@ -26,4 +26,13 @@ public class CommentService {
         threadRepository.save(thread);
         return thread;
     }
+
+    public Thread deleteComment (String threadid, int commentIndex) {
+        Thread thread = mongoTemplate.findById(threadid, Thread.class);
+        List<Comment> comments = thread.getComments();
+        comments.remove(commentIndex);
+        thread.setComments(comments);
+        threadRepository.save(thread);
+        return thread;
+    }
 }

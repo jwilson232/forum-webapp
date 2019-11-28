@@ -42,19 +42,20 @@ public class ThreadService {
             return threads;
         }
 
-        public List<Thread> filterThread(Integer pageSize, String sort, Integer page) {
-            Pageable sortByAsc = PageRequest.of(page, pageSize, Sort.by(sort));
-            Page<Thread> threads = threadRepository.findAll(sortByAsc);
-            return threads.getContent();
-        }
+//        public List<Thread> filterThread(Integer pageSize, String sort, Integer page) {
+//            Pageable sortByAsc = PageRequest.of(page, pageSize, Sort.by(sort));
+//            Page<Thread> threads = threadRepository.findAll(sortByAsc);
+//            return threads.getContent();
+//        }
 
-        public String deleteThread(Integer threadid) {
+        public String deleteThread(String threadid) {
             Thread thread = mongoTemplate.findById(threadid, Thread.class);
-            threadRepository.deleteById(threadid);
-            return "Thread: " + thread.getTitle() + " (" + thread.getId() + ") has been deleted.";
+            threadRepository.delete(thread);
+            return "Thread: " + thread.getId() + " has been deleted.";
         }
 
         public List<Thread> getAllThreads() {
             return mongoTemplate.findAll(Thread.class);
         }
+
 }

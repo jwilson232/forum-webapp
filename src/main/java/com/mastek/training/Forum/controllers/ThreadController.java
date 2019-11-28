@@ -21,10 +21,10 @@ public class ThreadController {
         return threadService.searchThreads(key, value);
     }
 
-    @GetMapping("/threadFilter")
-    public List<Thread> filterThread(@RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sort, @RequestParam(required = false) Integer page) {
-        return threadService.filterThread(pageSize, sort, page);
-    }
+//    @GetMapping("/threadFilter")
+//    public List<Thread> filterThread(@RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sort, @RequestParam(required = false) Integer page) {
+//        return threadService.filterThread(pageSize, sort, page);
+//    }
 
     @GetMapping("/threads")
     public List<Thread> getAllThreads() {
@@ -37,7 +37,7 @@ public class ThreadController {
     }
 
     @DeleteMapping("/thread/{threadid}")
-    public String deleteThread(@PathVariable Integer threadid) {
+    public String deleteThread(@PathVariable String threadid) {
         return threadService.deleteThread(threadid);
     }
 
