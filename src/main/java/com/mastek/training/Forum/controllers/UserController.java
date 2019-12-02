@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -17,14 +20,19 @@ public class UserController {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    @PostMapping("/user")
+    @GetMapping
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @PostMapping("/register")
     public User addNewUser(@RequestBody User user) {
         userService.addNewUser(user);
         return user;
     }
 
-    @DeleteMapping("/user")
-    public String deleteUser(@RequestParam String userid) {
+    @DeleteMapping("/delete/{userId}")
+    public String deleteUser(@PathVariable("userId") String userid) {
         return userService.deleteUser(userid);
     }
 

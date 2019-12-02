@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -16,14 +18,17 @@ public class UserService {
     @Autowired
     MongoTemplate mongoTemplate;
 
+    public List<User> getAllUsers() { return mongoTemplate.findAll(User.class); }
+
     public User addNewUser(User user) {
         userRepository.save(user);
         return user;
     }
 
-    public String deleteUser(String userid) {
-        User user = mongoTemplate.findById(userid, User.class);
+    public String deleteUser(String userId) {
+        User user = mongoTemplate.findById(userId, User.class);
         userRepository.delete(user);
         return "User " + user.getUsername() + " has been deleted";
     }
+
 }
