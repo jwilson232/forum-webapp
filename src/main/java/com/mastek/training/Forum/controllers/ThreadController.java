@@ -10,38 +10,33 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequestMapping("/threads")
 @RestController
 public class ThreadController {
 
     @Autowired
     private ThreadService threadService;
 
-    @GetMapping("/threadSearch")
+    @GetMapping("/search")
     public List<Thread> searchThread(@RequestParam(required = false) String key, @RequestParam(required = false) String value) {
         return threadService.searchThreads(key, value);
     }
 
-//    @GetMapping("/threadFilter")
-//    public List<Thread> filterThread(@RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sort, @RequestParam(required = false) Integer page) {
-//        return threadService.filterThread(pageSize, sort, page);
-//    }
+    @GetMapping("/rankingAsc")
+    public List<Thread> filterThreadByRankingAsc() { return threadService.sortThreadsByRatingAsc(); }
 
-    @GetMapping("/threads")
-    public List<Thread> getAllThreads() {
-        return threadService.getAllThreads();
-    }
+    @GetMapping("/rankingDesc")
+    public List<Thread> filterThreadByRankingDesc() { return threadService.sortThreadsByRatingDesc(); }
 
-    @PostMapping("/thread")
+    @GetMapping
+    public List<Thread> getAllThreads() { return threadService.sortByNewestThread(); }
+
+    @PostMapping("/create")
     public Thread addNewThread(@RequestBody Thread thread) {
         return threadService.addNewThread(thread);
     }
 
-    @DeleteMapping("/thread/{threadid}")
-    public String deleteThread(@PathVariable String threadid) {
-        return threadService.deleteThread(threadid);
-    }
-
-
-
+    @DeleteMapping("/delete/{threadId}")
+    public String deleteThread(@PathVariable("threadId") String threadId) { return threadService.deleteThread(threadId); }
 
 }

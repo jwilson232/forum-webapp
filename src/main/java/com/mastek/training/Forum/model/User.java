@@ -1,6 +1,8 @@
 package com.mastek.training.Forum.model;
 
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 
 @Document(collection = "user")
+@Data
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -19,18 +23,6 @@ public class User {
     public User(String username, Date dob) {
         this.username = username;
         this.dob = dob;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
 }

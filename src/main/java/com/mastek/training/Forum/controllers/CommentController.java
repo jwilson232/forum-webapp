@@ -14,13 +14,13 @@ public class CommentController {
     CommentService commentService;
 
     @PostMapping("/comment")
-    public Thread addNewComment(@RequestBody Comment comment, @RequestParam String threadid) {
-        return commentService.addNewComment(comment, threadid);
+    public Thread addNewComment(@RequestBody Comment comment, @RequestParam String threadId) {
+        return commentService.addNewComment(comment, threadId);
     }
 
     @DeleteMapping("/comment")
-    public Thread deleteComment(@RequestParam String threadid, @RequestParam int commentIndex) {
-        return commentService.deleteComment(threadid, commentIndex);
+    public Thread deleteComment(@RequestParam String threadId, @RequestParam int commentIndex) {
+        return commentService.deleteComment(threadId, commentIndex);
     }
 
 }
