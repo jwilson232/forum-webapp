@@ -42,13 +42,13 @@ public class ThreadService {
             return threads;
         }
 
-        public List<Thread> sortThreadsByRatingAsc() {
+        public List<Thread> sortThreadsByRankingAsc() {
             return getAllThreads().stream()
                                   .sorted(Comparator.comparingInt(Thread::getRanking))
                                   .collect(Collectors.toList());
         }
 
-        public List<Thread> sortThreadsByRatingDesc() {
+        public List<Thread> sortThreadsByRankingDesc() {
             return getAllThreads().stream()
                                   .sorted(Comparator.comparingInt(Thread::getRanking).reversed())
                                   .collect(Collectors.toList());
