@@ -1,0 +1,228 @@
+{
+	"variables": [],
+	"info": {
+		"name": "forum-mongo",
+		"_postman_id": "8f22a6be-4a67-4842-95d6-6b8746cfcb90",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all users",
+			"request": {
+				"url": "http://localhost:9090/users",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get all threads",
+			"request": {
+				"url": "http://localhost:9090/threads",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Search threads",
+			"request": {
+				"url": {
+					"raw": "http://localhost:9090/threads/search?key=title&value=What is 4 x 28?",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"threads",
+						"search"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "title",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "value",
+							"value": "What is 4 x 28?",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Search threads by ascending rank",
+			"request": {
+				"url": "http://localhost:9090/threads/sort/rank/asc",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Search threads by descending rank",
+			"request": {
+				"url": "http://localhost:9090/threads/sort/rank/desc",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add a thread",
+			"request": {
+				"url": "http://localhost:9090/threads/create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\t\n\t\"title\" : \"What is 4 x 28?\",\n\t\"body\" : \"I need to know the answer!\",\n\t\"ranking\" : -3\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add a comment",
+			"request": {
+				"url": {
+					"raw": "http://localhost:9090/comment?threadid=5ddd4aa1682d3c6b7303b27f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"comment"
+					],
+					"query": [
+						{
+							"key": "threadid",
+							"value": "5ddd4aa1682d3c6b7303b27f",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"response\" : \"Dumb\",\n\t\"rating\" : 33,\n\t\"userId\" : \"jwilson11\"\n} "
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add a user",
+			"request": {
+				"url": "http://localhost:9090/users/create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\" : \"jwilson11\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"request": {
+				"url": "localhost:9090/users/delete/5de52f5b61266f2510b7c080",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete thread",
+			"request": {
+				"url": "http://localhost:9090/threads/delete/5de0f31bc95b490b88a9fc59",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete comment ",
+			"request": {
+				"url": {
+					"raw": "localhost:9090/comment?threadid=5ddd4aa1682d3c6b7303b27f&commentIndex=2",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"comment"
+					],
+					"query": [
+						{
+							"key": "threadid",
+							"value": "5ddd4aa1682d3c6b7303b27f",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "commentIndex",
+							"value": "2",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
