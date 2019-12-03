@@ -1,5 +1,8 @@
 package com.mastek.training.Forum.model;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class Comment {
     private String response;
     private int rating;
@@ -34,6 +37,7 @@ public class Comment {
         this.rating = rating;
         this.userId = userId;
     }
+
 }
 
 

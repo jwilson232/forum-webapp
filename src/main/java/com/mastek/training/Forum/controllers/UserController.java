@@ -1,7 +1,7 @@
 package com.mastek.training.Forum.controllers;
 
+import com.mastek.training.Forum.common.Constants;
 import com.mastek.training.Forum.model.User;
-import com.mastek.training.Forum.repository.UserRepository;
 import com.mastek.training.Forum.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.mastek.training.Forum.common.Constants.Common.*;
+import static com.mastek.training.Forum.common.Constants.URIPaths.USER_ID;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping(USERS)
 public class UserController {
 
     @Autowired
@@ -25,15 +27,15 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PostMapping("/register")
+    @PostMapping(CREATE)
     public User addNewUser(@RequestBody User user) {
         userService.addNewUser(user);
         return user;
     }
 
-    @DeleteMapping("/delete/{userId}")
-    public String deleteUser(@PathVariable("userId") String userid) {
-        return userService.deleteUser(userid);
+    @DeleteMapping(DELETE + USER_ID)
+    public String deleteUser(@PathVariable(Constants.URIParams.USER_ID) String userId) {
+        return userService.deleteUser(userId);
     }
 
 
