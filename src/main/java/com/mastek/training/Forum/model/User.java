@@ -19,10 +19,11 @@ public class User {
     private String id;
     private String username;
     private Date dob;
+    private String email;
+    private String gmailId;
 
     public User(String username, Date dob) {
         this.username = username;
         this.dob = dob;
     }
-
 }

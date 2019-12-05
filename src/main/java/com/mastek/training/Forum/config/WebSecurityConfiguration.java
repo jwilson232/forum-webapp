@@ -21,4 +21,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated();
     }
+
+
 }

@@ -14,7 +14,9 @@ public interface Constants {
         String DESC = "/desc";
         String ASC = "/asc";
         String SEARCH = "/search";
-
+        String WELCOME = "/welcome";
+        String PAGE = "/page";
+        String PROFILE = "/profile";
     }
 
     interface  ViewNames {
