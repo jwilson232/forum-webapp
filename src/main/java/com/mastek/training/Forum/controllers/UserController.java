@@ -6,18 +6,17 @@ import com.mastek.training.Forum.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.mastek.training.Forum.common.Constants.Common.*;
 import static com.mastek.training.Forum.common.Constants.URIPaths.USER_ID;
 
-@Controller
 @RequestMapping(USERS)
+@Controller
 public class UserController {
 
     @Autowired
@@ -29,23 +28,43 @@ public class UserController {
     @Value("${app.thread.title}")
     private String TITLE = "";
 
-    @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    @GetMapping(PROFILE)
+    public String getAllUsers(Map<String, Object> model, OAuth2Authentication oAuth2Authentication){
+        String gmailId = userService.googleDetails(oAuth2Authentication).get("id");
+        String profile = "profile";
+
+        User user = userService.customUserSearch("gmailId", gmailId);
+        model.put("title", TITLE);
+
+        if (user == null) {
+            profile = "updateprofile";
+        } else {
+            model.put("firstname", user.getFirstName());
+            model.put("lastname", user.getLastName());
+            model.put("username", user.getUsername());
+            model.put("email", user.getEmail());
+        }
+
+        return profile;
     }
 
-//    @PostMapping(CREATE)
-//    public User addNewUser(@RequestBody User user, OAuth2Authentication oAuth2Authentication) {
-//        user.setEmail(userService.googleDetails(oAuth2Authentication).get("email"));
-//        user.setGmailId(userService.googleDetails(oAuth2Authentication).get("id"));
-//        userService.addNewUser(user);
-//        return user;
-//    }
-
     @PostMapping(CREATE)
-    public User addNewUser(@RequestBody User user) {
+    public String addNewUser(OAuth2Authentication oAuth2Authentication,
+                            @ModelAttribute("User") User user, Map<String, Object> model) {
+        String email = userService.googleDetails(oAuth2Authentication).get("email");
+        String gmailId = userService.googleDetails(oAuth2Authentication).get("id");
+
+        user.setEmail(email);
+        user.setGmailId(gmailId);
         userService.addNewUser(user);
-        return user;
+        model.put("title", TITLE);
+
+        model.put("firstname", user.getFirstName());
+        model.put("lastname", user.getLastName());
+        model.put("username", user.getUsername());
+        model.put("email", user.getEmail());
+
+        return "profile";
     }
 
     @DeleteMapping(DELETE + USER_ID)

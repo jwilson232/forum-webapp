@@ -1,0 +1,1 @@
+Ctrl + F9 for auto reload of static content

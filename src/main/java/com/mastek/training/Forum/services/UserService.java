@@ -4,6 +4,8 @@ import com.mastek.training.Forum.model.User;
 import com.mastek.training.Forum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Service;
 
@@ -38,4 +40,9 @@ public class UserService {
          return details;
     }
 
+    public User customUserSearch(String key, String value) {
+        Query customFilter = new Query();
+        customFilter.addCriteria(Criteria.where(key).is(value));
+        return mongoTemplate.findOne(customFilter, User.class);
+    }
 }

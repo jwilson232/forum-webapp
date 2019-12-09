@@ -21,9 +21,14 @@ public class User {
     private Date dob;
     private String email;
     private String gmailId;
+    private String firstName;
+    private String lastName;
 
-    public User(String username, Date dob) {
+    public User(String username, String email, String gmailId, String firstName, String lastName) {
         this.username = username;
-        this.dob = dob;
+        this.email = email;
+        this.gmailId = gmailId;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 }
