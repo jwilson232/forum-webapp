@@ -38,11 +38,18 @@ public class UserService {
     public LinkedHashMap<String, String> googleDetails(OAuth2Authentication oAuth2Authentication) {
          LinkedHashMap<String, String> details = (LinkedHashMap<String, String>)oAuth2Authentication.getUserAuthentication().getDetails();
          return details;
+
     }
 
     public User customUserSearch(String key, String value) {
         Query customFilter = new Query();
         customFilter.addCriteria(Criteria.where(key).is(value));
         return mongoTemplate.findOne(customFilter, User.class);
+    }
+
+    public User getUserByGmailId(OAuth2Authentication oAuth2Authentication) {
+        String gmailId = googleDetails(oAuth2Authentication).get("id");
+        User user = customUserSearch("gmailId", gmailId);
+        return user;
     }
 }
