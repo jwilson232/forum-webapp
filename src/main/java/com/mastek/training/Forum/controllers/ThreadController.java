@@ -46,9 +46,8 @@ public class ThreadController {
     @PostMapping(CREATE)
     public String addNewThread(OAuth2Authentication oAuth2Authentication, @ModelAttribute("thread") Thread thread,
                                Map<String, Object> model) {
-        String gmailId = userService.googleDetails(oAuth2Authentication).get("id");
-        thread.setUserGmailId(gmailId);
-        threadService.addNewThread(thread);
+
+        threadService.addNewThread(thread, oAuth2Authentication);
         model.put("title", TITLE);
         return "threads";
     }

@@ -24,14 +24,16 @@ public class Thread {
     private int ranking;
     private String userGmailId;
     private List<Comment> comments = new ArrayList<>();
+    private String username;
 
-    public Thread(int ranking, List<Comment> comments, String title, String body, String userGmailId) {
+    public Thread(int ranking, List<Comment> comments, String title, String body, String userGmailId, String username) {
         this.ranking = ranking;
         this.comments = comments;
         this.title = title;
         this.body = body;
         this.date = LocalDateTime.now();
         this.userGmailId = userGmailId;
+        this.username = username;
     }
 
 }

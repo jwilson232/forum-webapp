@@ -1,12 +1,14 @@
 package com.mastek.training.Forum.services;
 
 import com.mastek.training.Forum.model.Thread;
+import com.mastek.training.Forum.model.User;
 import com.mastek.training.Forum.repository.ThreadRepository;
 import com.mastek.training.Forum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,9 +27,18 @@ public class ThreadService {
     private UserRepository userRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private MongoTemplate mongoTemplate;
 
-        public Thread addNewThread(Thread thread) {
+        public Thread addNewThread(Thread thread, OAuth2Authentication oAuth2Authentication) {
+            User user = userService.getUserByGmailId(oAuth2Authentication);
+            String gmailId = user.getGmailId();
+            String username = user.getUsername();
+
+            thread.setUserGmailId(gmailId);
+            thread.setUsername(username);
             thread.setComments(new ArrayList<>());
             thread.setDate(LocalDateTime.now());
             threadRepository.save(thread);
