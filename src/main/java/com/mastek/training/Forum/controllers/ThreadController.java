@@ -34,11 +34,19 @@ public class ThreadController {
         return threadService.searchThreads(key, value);
     }
 
-    @GetMapping(SORT + RANK + ASC)
-    public List<Thread> sortThreadsByRankAsc() { return threadService.sortThreadsByRankingAsc(); }
+    @RequestMapping(SORT + RANK + ASC)
+    public String sortThreadsByRankAsc(Map<String, Object> model) {
+        model.put("title", TITLE);
+        model.put("thread", threadService.sortThreadsByRankingAsc());
+        return "threads";
+    }
 
-    @GetMapping(SORT + RANK + DESC)
-    public List<Thread> sortThreadsByRankDesc() { return threadService.sortThreadsByRankingDesc(); }
+    @RequestMapping(SORT + RANK + DESC)
+    public String sortThreadsByRankDesc(Map<String, Object> model) {
+        model.put("title", TITLE);
+        model.put("thread", threadService.sortThreadsByRankingDesc());
+        return "threads";
+    }
 
     @GetMapping
     public List<Thread> getAllThreads() { return threadService.sortByNewestThread(); }
@@ -57,14 +65,9 @@ public class ThreadController {
 
     @RequestMapping(PAGE)
     public String thread(Map<String, Object> model, OAuth2Authentication oAuth2Authentication) {
-        if (userService.getUserByGmailId(oAuth2Authentication) == null) {
-            model.put("title", TITLE);
-            return "threadswarn";
-        } else {
-            model.put("title", TITLE);
-            return "threads";
-        }
-
+        model.put("title", TITLE);
+        model.put("loggedIn", userService.isUserLoggedIn(oAuth2Authentication));
+        return "addthread";
     }
 
 }

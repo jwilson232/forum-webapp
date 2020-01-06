@@ -1,6 +1,5 @@
 package com.mastek.training.Forum.controllers;
 
-import com.mastek.training.Forum.model.User;
 import com.mastek.training.Forum.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,18 +22,10 @@ public class WelcomeController {
 
     @RequestMapping(WELCOME)
     public String welcome(Map<String, Object> model, OAuth2Authentication oAuth2Authentication) {
-        String welcome = "welcome";
-        String gmailId = userService.googleDetails(oAuth2Authentication).get("id");
-        User user = userService.customUserSearch("gmailId", gmailId);
-
         model.put("title", TITLE);
         model.put("message", "Hello " + userService.googleDetails(oAuth2Authentication).get("email"));
-
-        if (user == null) {
-            welcome = "welcomewarn";
-        }
-
-        return welcome;
+        model.put("loggedIn", userService.isUserLoggedIn(oAuth2Authentication));
+        return "welcome";
     }
 
     @RequestMapping("/")

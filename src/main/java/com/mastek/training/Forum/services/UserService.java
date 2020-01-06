@@ -52,4 +52,11 @@ public class UserService {
         User user = customUserSearch("gmailId", gmailId);
         return user;
     }
+
+    public Boolean isUserLoggedIn(OAuth2Authentication oAuth2Authentication) {
+        Boolean loggedIn = true;
+        User user = getUserByGmailId(oAuth2Authentication);
+        if (user == null) loggedIn = false;
+        return loggedIn;
+    }
 }
