@@ -6,6 +6,7 @@ public interface Constants {
 
         String USERS = "/users";
         String THREADS = "/threads";
+        String THREAD = "/thread";
         String COMMENTS = "/comments";
         String CREATE = "/create";
         String DELETE = "/delete";

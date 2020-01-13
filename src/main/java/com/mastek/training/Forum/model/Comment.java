@@ -7,6 +7,7 @@ public class Comment {
     private String response;
     private int rating;
     private String userId;
+    private String username;
 
     public String getResponse() {
         return response;
@@ -32,12 +33,20 @@ public class Comment {
         this.userId = userId;
     }
 
-    public Comment(String response, int rating, String userId) {
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Comment(String response, int rating, String userId, String username) {
         this.response = response;
         this.rating = rating;
         this.userId = userId;
+        this.username = username;
     }
-
 }
 
 

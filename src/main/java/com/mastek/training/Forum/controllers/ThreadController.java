@@ -1,7 +1,6 @@
 package com.mastek.training.Forum.controllers;
 
 import com.mastek.training.Forum.model.Thread;
-import com.mastek.training.Forum.model.User;
 import com.mastek.training.Forum.services.ThreadService;
 import com.mastek.training.Forum.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -34,10 +34,12 @@ public class ThreadController {
         return threadService.searchThreads(key, value);
     }
 
+    // http://localhost:9090/threads/sort/rank/asc
     @RequestMapping(SORT + RANK + ASC)
     public String sortThreadsByRankAsc(Map<String, Object> model) {
         model.put("title", TITLE);
-        model.put("thread", threadService.sortThreadsByRankingAsc());
+        List<Thread> threads = threadService.sortThreadsByRankingAsc();
+        model.put("thread", threads);
         return "threads";
     }
 
@@ -70,4 +72,16 @@ public class ThreadController {
         return "addthread";
     }
 
+    @RequestMapping(THREAD_ID)
+    public String getOneThread(@PathVariable("threadId") String threadId, Map<String, Object> model) {
+        Thread thread = threadService.searchForOneThread("id", threadId);
+        model.put("threadId", threadId);
+        model.put("title", thread.getTitle());
+        model.put("body", thread.getBody());
+        model.put("username", thread.getUsername());
+        model.put("comments", thread.getComments());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        model.put("date", thread.getDate().format(formatter));
+        return "thread";
+    }
 }

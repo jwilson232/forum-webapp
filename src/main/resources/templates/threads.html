@@ -3,9 +3,10 @@
 
 {{>layout/threads-top}}
 
-<div>
+<div style="width: 400px; margin-left: 125px;">
     {{#thread}}
-        <b>{{title}}</b>
+    <a href="/threads/{{id}}">{{title}}</a>
+    <br>
     {{/thread}}
 </div>
 

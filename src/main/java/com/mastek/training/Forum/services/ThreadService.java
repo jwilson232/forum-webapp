@@ -53,6 +53,13 @@ public class ThreadService {
             return threads;
         }
 
+        public Thread searchForOneThread(String key, String value) {
+            Query customerFilter = new Query();
+            customerFilter.addCriteria(Criteria.where(key).is(value));
+            Thread thread = mongoTemplate.findOne(customerFilter, Thread.class);
+            return thread;
+        }
+
         public List<Thread> sortThreadsByRankingAsc() {
             return getAllThreads().stream()
                                   .sorted(Comparator.comparingInt(Thread::getRanking))
